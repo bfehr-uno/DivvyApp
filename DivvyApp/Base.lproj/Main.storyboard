@@ -21,19 +21,72 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0pj-40-ZnO">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                             </mapView>
+                            <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="FKN-bE-S2P">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cellID" textLabel="sip-Fy-nJv" detailTextLabel="cSF-nk-fkA" style="IBUITableViewCellStyleValue1" id="Y4d-23-S4V">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Y4d-23-S4V" id="7TA-XJ-Ubw">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="sip-Fy-nJv">
+                                                    <rect key="frame" x="20" y="12" width="33.5" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cSF-nk-fkA">
+                                                    <rect key="frame" x="350" y="12" width="44" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="wR0-bN-3sP"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="DHS-72-5kK"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="0pj-40-ZnO" secondAttribute="trailing" id="0Pl-5G-tiO"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="FKN-bE-S2P" secondAttribute="bottom" id="CIK-Ax-xl7"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="FKN-bE-S2P" secondAttribute="trailing" id="LZZ-wr-Ugp"/>
+                            <constraint firstItem="FKN-bE-S2P" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Uip-XO-rF8"/>
                             <constraint firstItem="0pj-40-ZnO" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="k2e-se-C4F"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="0pj-40-ZnO" secondAttribute="bottom" id="qZT-Kf-eYf"/>
                             <constraint firstItem="0pj-40-ZnO" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="qyU-oN-b3G"/>
+                            <constraint firstItem="FKN-bE-S2P" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="r1t-7C-h1U"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" id="ZPC-nv-1dP"/>
+                    <navigationItem key="navigationItem" id="ZPC-nv-1dP">
+                        <nil key="title"/>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="cWC-p4-DSq">
+                            <rect key="frame" x="165.5" y="7" width="83" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="Map"/>
+                                <segment title="List"/>
+                            </segments>
+                            <connections>
+                                <action selector="onSegmentSelected:" destination="BYZ-38-t0r" eventType="valueChanged" id="mAW-p4-crG"/>
+                            </connections>
+                        </segmentedControl>
+                    </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="0pj-40-ZnO" id="FMA-6U-Not"/>
+                        <outlet property="segmentedController" destination="cWC-p4-DSq" id="yvd-EX-krd"/>
+                        <outlet property="tableView" destination="FKN-bE-S2P" id="a5V-JB-jYn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

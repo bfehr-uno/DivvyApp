@@ -10,14 +10,18 @@ import UIKit
 import CoreLocation
 import MapKit
 
-class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource {
     
     let locationManager = CLLocationManager()
     let address = "https://feeds.divvybikes.com/stations/stations.json"
     var selectedAnnotation = MKPointAnnotation()
+    var dictionArray : [[String: Any]] = []
+    var dictionary = ["lattitude": 0.0, "longitude": 0.0, "name": "", "numberOfBikes": 0, "distance" : 0.0] as [String : Any]
     
     
     
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var segmentedController: UISegmentedControl!
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
@@ -77,9 +81,24 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
             let latitude = result["latitude"].doubleValue
             let longitude = result["longitude"].doubleValue
             let name = result["stationName"].stringValue
-            let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+            let numberOfBikes = result["availableBikes"].intValue
+            let location = CLLocation(latitude: latitude, longitude: longitude)
+            let user = MKUserLocation()
+            let userLocation = CLLocation(latitude: user.coordinate.latitude, longitude: user.coordinate.longitude)
+            let distanceInKilometers = userLocation.distance(from: location)/1000.0
+            dictionary["name"] = name
+            dictionary["lattitude"] = latitude
+            dictionary["longitude"] = longitude
+            dictionary["numberOfBikes"] = numberOfBikes
+            dictionary["distance"] = distanceInKilometers
+            dictionArray.append(dictionary)
+            let sortedResults = (dictionArray as NSArray).sortedArray(using: [NSSortDescriptor(key: "distance", ascending: true)]) as! [[String:Any]]
+            dictionArray = sortedResults
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
             let annotation = MKPointAnnotation()
-            annotation.coordinate = location
+            annotation.coordinate = location.coordinate
             annotation.title = name
             mapView.addAnnotation(annotation)
         }
@@ -122,6 +141,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
             }
         }
         return -1
+    }
+    @IBAction func onSegmentSelected(_ sender: UISegmentedControl) {
+        if segmentedController.selectedSegmentIndex == 0{
+            mapView.isHidden = false
+            tableView.isHidden = true
+        }
+        if segmentedController.selectedSegmentIndex == 1{
+            mapView.isHidden = true
+            tableView.isHidden = false
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dictionArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellID")
+        let usedDictionary = dictionArray[indexPath.row]
+        let distanceDouble = usedDictionary["distance"]
+        let distance = String(format: "%.0f", distanceDouble as! CVarArg)
+        cell?.textLabel!.text = (usedDictionary["name"] as! String)
+        cell?.detailTextLabel!.text = "\(distance) Kilometers\n\(usedDictionary["numberOfBikes"]!) bike(s)"
+        return cell!
     }
 }
 
