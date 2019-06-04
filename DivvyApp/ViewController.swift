@@ -13,6 +13,7 @@ import MapKit
 class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource {
     
     let locationManager = CLLocationManager()
+    var userLocation = CLLocation()
     let address = "https://feeds.divvybikes.com/stations/stations.json"
     var selectedAnnotation = MKPointAnnotation()
     var dictionArray : [[String: Any]] = []
@@ -40,9 +41,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         
         selectedAnnotation = view.annotation as! MKPointAnnotation
         let annotationLocation = CLLocation(latitude: selectedAnnotation.coordinate.latitude, longitude: selectedAnnotation.coordinate.longitude)
-        let user = MKUserLocation()
-        let location = CLLocation(latitude: user.coordinate.latitude, longitude: user.coordinate.longitude)
-        let distanceInMeters = location.distance(from: annotationLocation)
+        let distanceInMeters = userLocation.distance(from: annotationLocation)
         var bikeNumber : Int = -1
         var bikeString : String = ""
         if let url = URL(string: address){
@@ -60,7 +59,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         }else{
             bikeString = "\(bikeNumber)"
         }
-        let alertController = UIAlertController(title: "Distance in Meters & Number of Bikes:", message: "\(distanceInMeters) meters\n \(bikeString) bikes", preferredStyle: .alert)
+        let distanceDouble = distanceInMeters/1609.34
+        let distance = String(format: "%.2f", distanceDouble as CVarArg)
+        let alertController = UIAlertController(title: selectedAnnotation.title, message: "Distance in Miles: \(distance) Miles\nNumber of Bikes: \(bikeString) bike(s)", preferredStyle: .alert)
         let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
         alertController.addAction(action)
         present(alertController, animated: true)
@@ -70,6 +71,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         let location = locations.first
+        userLocation = location!
         let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
         let center = location?.coordinate
         let region = MKCoordinateRegion(center: center!, span: span)
@@ -84,14 +86,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
             let name = result["stationName"].stringValue
             let numberOfBikes = result["availableBikes"].intValue
             let location = CLLocation(latitude: latitude, longitude: longitude)
-            let user = MKUserLocation()
-            let userLocation = CLLocation(latitude: user.coordinate.latitude, longitude: user.coordinate.longitude)
-            let distanceInKilometers = userLocation.distance(from: location)/1000.0
+            let distanceInMiles = userLocation.distance(from: location)/1609.34
+            print(distanceInMiles)
             dictionary["name"] = name
             dictionary["lattitude"] = latitude
             dictionary["longitude"] = longitude
             dictionary["numberOfBikes"] = numberOfBikes
-            dictionary["distance"] = distanceInKilometers
+            dictionary["distance"] = distanceInMiles
             dictionArray.append(dictionary)
             let sortedResults = (dictionArray as NSArray).sortedArray(using: [NSSortDescriptor(key: "distance", ascending: true)]) as! [[String:Any]]
             dictionArray = sortedResults
@@ -162,9 +163,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellID")
         let usedDictionary = dictionArray[indexPath.row]
         let distanceDouble = usedDictionary["distance"]
-        let distance = String(format: "%.0f", distanceDouble as! CVarArg)
+        let distance = String(format: "%.2f", distanceDouble as! CVarArg)
         cell?.textLabel!.text = (usedDictionary["name"] as! String)
-        cell?.detailTextLabel!.text = "\(distance) Kilometers\n\(usedDictionary["numberOfBikes"]!) bike(s)"
+        cell?.detailTextLabel!.text = "\(distance) Miles\n\(usedDictionary["numberOfBikes"]!) bike(s)"
         return cell!
     }
     
