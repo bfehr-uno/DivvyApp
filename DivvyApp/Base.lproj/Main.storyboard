@@ -87,11 +87,41 @@
                         <outlet property="mapView" destination="0pj-40-ZnO" id="FMA-6U-Not"/>
                         <outlet property="segmentedController" destination="cWC-p4-DSq" id="yvd-EX-krd"/>
                         <outlet property="tableView" destination="FKN-bE-S2P" id="a5V-JB-jYn"/>
+                        <segue destination="sej-hR-ZMD" kind="show" identifier="segueToDetailVC" id="BSh-n9-7lQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="930" y="763"/>
+        </scene>
+        <!--Detail View Controller-->
+        <scene sceneID="zYf-pZ-oIN">
+            <objects>
+                <viewController id="sej-hR-ZMD" customClass="DetailViewController" customModule="DivvyApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ixx-Kq-rMJ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tlc-fh-nfY">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="mWE-xy-w2j" firstAttribute="trailing" secondItem="tlc-fh-nfY" secondAttribute="trailing" id="3Bd-ea-Uds"/>
+                            <constraint firstItem="tlc-fh-nfY" firstAttribute="leading" secondItem="mWE-xy-w2j" secondAttribute="leading" id="BOl-bY-elS"/>
+                            <constraint firstItem="tlc-fh-nfY" firstAttribute="top" secondItem="mWE-xy-w2j" secondAttribute="top" id="TtW-ZF-dVx"/>
+                            <constraint firstItem="mWE-xy-w2j" firstAttribute="bottom" secondItem="tlc-fh-nfY" secondAttribute="bottom" id="zCv-Xb-bT2"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="mWE-xy-w2j"/>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="tlc-fh-nfY" id="UZp-yR-CMH"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jz8-qa-vlq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1680" y="763"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="HKf-x1-XjA">

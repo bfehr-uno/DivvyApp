@@ -17,6 +17,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     var selectedAnnotation = MKPointAnnotation()
     var dictionArray : [[String: Any]] = []
     var dictionary = ["lattitude": 0.0, "longitude": 0.0, "name": "", "numberOfBikes": 0, "distance" : 0.0] as [String : Any]
+    var selectedCell = 0
     
     
     
@@ -165,6 +166,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         cell?.textLabel!.text = (usedDictionary["name"] as! String)
         cell?.detailTextLabel!.text = "\(distance) Kilometers\n\(usedDictionary["numberOfBikes"]!) bike(s)"
         return cell!
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let dvc = segue.destination as! DetailViewController
+        let usedDictionary = dictionArray[selectedCell]
+        dvc.selectedLattitude = usedDictionary["lattitude"] as! Double
+        dvc.selectedLongitude = usedDictionary["longitude"] as! Double
+        dvc.name = usedDictionary["name"] as! String
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedCell = indexPath.row
+        performSegue(withIdentifier: "segueToDetailVC", sender: nil)
     }
 }
 
